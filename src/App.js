@@ -1,27 +1,59 @@
-const Pet = (props) => {
-    return React.createElement("div", {}, [
-        React.createElement("h1", {}, props.name),
-        React.createElement("h2", {}, props.animal),
-        React.createElement("h2", {}, props.breed),
-    ]);
-};
+import { render } from "react-dom";
+import SearchParams from "./SearchParams";
+import Peli from "./Peli";
+import leviOVA from "./img/leviOVA.jpg";
+import alienista from "./img/alienisa.png";
+import theboys from "./img/theboys.jpg";
+import sthings from "./img/SThings.jpg";
+import { useState } from "react";
 
+const INFO = [
+  {
+    titulo:"OVA LEVI", 
+    imagen:leviOVA,
+    año:"2020"
+  },
+  {
+    titulo:"Stranger things", 
+    imagen:sthings,
+    año:"2020"
+  },
+  {
+    titulo:"The boys", 
+    imagen:theboys,
+    año:"2020"
+  }
+  ,
+  {
+    titulo:"Alienistas", 
+    imagen:alienista,
+    año:"2020"
+  }
+]
 const App = () => {
-
-    return React.createElement("div", {}, [
-        React.createElement("h1", {}, "Adopt Me!"),
-        React.createElement(Pet, {
-            name: "Luna",
-            animal: "Dog",
-            breed: "Havanese",
-        }),
-        React.createElement(Pet, {
-            name: "Pepper",
-            animal: "Bird",
-            breed: "Cockatiel",
-        }),
-        React.createElement(Pet, { name: "Doink", animal: "Cat", breed: "Mix" }),
-    ]);
+  const [busqueda, setBusqueda] = useState("");
+  return (
+    <div className="app">
+      <nav>
+        <h1>PELIS!</h1>
+      </nav>
+      <input 
+        onChange={e => setBusqueda(e.target.value)}
+        value={busqueda}
+        placeholder="Buscar peliculas"
+      />
+      <div className="grid">
+        {
+          INFO
+            .filter(x => {
+              const titulo = x.titulo.toLocaleLowerCase();
+              return titulo.includes(busqueda.toLocaleLowerCase())
+            })
+            .map(x => (<Peli titulo={x.titulo} imagen={x.imagen} año={x.año}></Peli>))
+        }
+      </div>
+    </div>
+  );
 };
 
-ReactDOM.render(React.createElement(App), document.getElementById("root"));
+render(<App />, document.getElementById("root"));
